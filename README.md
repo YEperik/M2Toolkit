@@ -45,10 +45,10 @@ ctest --test-dir build --output-on-failure
 
 The tool writes:
 
-- `block_chain.csv` — measured block bases, first-word pointer candidates, candidate byte ranges and candidate table ranges.
-- `WORDSEVE_offsets.csv` — the 68 verified string references from block 0.
-- `WORDSEVE_tables_raw_u16.csv` — raw 16-bit values from candidate tables in both `WORDSEVE` blocks.
+- `docs/block_chain.csv` — measured block bases, first-word pointer candidates, candidate byte ranges and candidate table ranges.
+- `docs/WORDSEVE_offsets.csv` — the 68 verified string references from block 0.
+- `docs/WORDSEVE_tables_raw_u16.csv` — raw 16-bit values from candidate tables in both `WORDSEVE` blocks.
 - `WORDS_u16_region.csv` — raw 16-bit values and source byte offsets from both `WORDS` blocks.
-- `probe_report.txt` — concise findings and limitations.
+- `docs/probe_report.txt` — concise findings and limitations.
 
 Use a separate output directory to keep source assets untouched. The reader enforces file-size limits, range/overflow checks, forward-only block pointers, table-size divisibility, NUL termination, printable ASCII, and visible string boundaries. It fails closed if the observed layout does not fit.
