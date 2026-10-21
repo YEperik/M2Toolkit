@@ -1,0 +1,37 @@
+DATASE text examination — block structure report and raw tables
+==============
+
+All fields whose semantics have not yet been verified are referred to as "candidates." The parser performs a read-only analysis of the input.
+
+Candidate block chains
+  WORDS.BIN: 2 blocks found at bases 0x0, 0x91AC. First-word pointer values: 0x91AC, 0x0
+  WORDSEVE.BIN: 2 blocks found at bases 0x0, 0x4280. First-word pointer values: 0x4280, 0x0
+  Supporting evidence: the first block's pointer matches the starting offset of the subsequent block; the target block begins with a 0 pointer and a similar local header.
+  Interpretation as a linked-block chain: high confidence, though the meaning of the pointers has not yet been verified against the game code.
+
+WORDSEVE.BIN — validated string offset table
+  File size: 715,012 bytes (0xAE904)
+  Block 0: base 0x0; relative table at 0x440–0x4C8
+  Table size: 136 bytes; 68 uint16 values
+  Candidate string pool: 0x4CC (offset + 4-byte header)
+  Validation result: 68/68 entries point to NUL-terminated, printable ASCII strings with discernible boundaries.
+  Unique relative offsets: 66; unique string contents: 21
+  Block 1: candidate table at relative offset 0xF8–0x114, containing 14 uint16 values; validation indicates this table does NOT pass the ASCII string offset test, so the raw values ​​are exported as-is to avoid misinterpretation.
+  Confidence: high for the string offset table in Block 0; no semantic conclusion reached for the table in Block 1.
+WORDS.BIN — raw uint16 region
+  File size: 2,162,940 bytes (0x2100FC)
+  Number of blocks: 2; each block contains a candidate region at relative offsets 0x338–0x4F8
+  Exported uint16 values: 448 total (224 per block)
+  Block 0 prefix: 0x0000, 0x00DD, 0x0000
+  Block 1 prefix: 0x0001, 0x00DD, 0x0000
+  Indices 1–107 of the 16-bit table are identical between the two blocks; indices 0 and 108–223 differ. This is based solely on a comparison of the raw values.
+  Data pool prefix: Block 0 begins at 0x4F8 with the bytes 46 0C 00 00 3F 00; the first visible ASCII text starts at 0x4FE.
+  Block 1 data pool begins at 0x96A4 with the bytes C5 0B 00 00 3F 00; the first visible ASCII text starts 6 bytes later.
+  Confidence: High regarding boundaries/counts; the purpose of the uint16 table and the 6-byte preamble remains unknown.
+
+WORDSEVE raw table values: 82 rows exported, including a second, as-yet-uninterpreted table.
+
+Tests and limitations
+  Input is read in binary mode; offsets, counts, lengths, pointer chains, NUL terminators, and printable ASCII characters are validated.
+  The program rejects pointers that fall outside the file, block cycles, invalid table ranges, unterminated strings, or targets that do not align with string boundaries.
+  There is no writer component; no claim is made that the output can be read back by the game; the platform identity remains unconfirmed.
